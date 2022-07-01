@@ -16,9 +16,20 @@ const TopNav = ({ loggedUser }) => {
   return (
     <div className="topnav">
       <nav className="navbar">
-        <div className="navbar-brand">
-          Rishu
+        <div className="navbar-brand is-align-item-center is-justify-content-space-between">
           <img src={logo} alt="Instagram" />
+          <div className="is-hidden-desktop is-flex">
+            <div className="navbar-item">
+              <a>
+                <img src={homeIcon} alt="" width={15} />
+              </a>
+            </div>
+            <div className="navbar-item">
+              <a onClick={handlePostModal}>
+                <img src={addIcon} alt="" width={15} />
+              </a>
+            </div>
+          </div>
         </div>
         <div className="navbar-menu">
           <div className="navbar-start"></div>
