@@ -25,7 +25,7 @@ const Home = ({ loggedUser }) => {
   return (
     <div className="homepage">
       <TopNav loggedUser={loggedUser}></TopNav>
-      <div className="columns is-flex-direction-column is-align-items-center has-margin-top-50">
+      <div className="columns is-flex-direction-column is-align-items-center is-marginless has-margin-top-50">
         {posts &&
           posts.map((post) => {
             return (

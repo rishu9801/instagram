@@ -77,7 +77,16 @@ const CreatePost = ({ setPostModalOpen }) => {
 
   return (
     <div className="modal is-active create-post">
-      <div className="modal-background"></div>
+      <div className="modal-background">
+        <button
+          className="button is-pulled-right is-dark has-background-transparent is-small"
+          onClick={() => {
+            setPostModalOpen(false);
+          }}
+        >
+          <i className="fas fa-times"></i>
+        </button>
+      </div>
       <div className="modal-card">
         <header className="modal-card-head has-background-white has-padding-10 ">
           <p className="modal-card-title title has-text-centered is-size-6">

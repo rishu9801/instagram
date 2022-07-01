@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.has-background-transparent {
+  background-color: transparent !important;
+}
+
 /*Auth component*/
 .auth_form {
   position: absolute;
@@ -34,7 +38,7 @@ code {
     width: 70%;
     margin: auto;
     .navbar-brand {
-      img {
+      > img {
         width: 100px;
         object-fit: contain;
       }
