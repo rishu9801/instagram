@@ -21,6 +21,7 @@ const Post = ({ id, data }) => {
   const commentQuery = query(commentRef, orderBy("createdAt", "desc"));
   const [comments, setComments] = useState([]);
   const [newComments, setNewComments] = useState("");
+  const [commentStatus, setCommentStatus] = useState(false);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -32,6 +33,11 @@ const Post = ({ id, data }) => {
           })
         );
       });
+      if (newComments) {
+        setCommentStatus(false);
+      } else {
+        setCommentStatus(true);
+      }
     }
   }, [comments, newComments]);
 
@@ -70,6 +76,7 @@ const Post = ({ id, data }) => {
     }
   };
   const handleComment = (e) => {
+    setCommentStatus(true);
     e.preventDefault();
     let newComment = {
       comment: newComments,
@@ -79,6 +86,7 @@ const Post = ({ id, data }) => {
     addDoc(commentRef, newComment)
       .then((res) => {
         setNewComments("");
+        setCommentStatus(false);
       })
       .catch((err) => console.log(err));
   };
@@ -141,14 +149,15 @@ const Post = ({ id, data }) => {
           </div>
           <p>
             <small>
-              {likes.length >= 2
+              {likes.length > 2
                 ? `Liked by ${likes[0].data.user} and ${
                     likes.length - 1
                   } others`
                 : ""}
-              {likes.length > 0 && likes.length < 2
-                ? likes.length + "likes"
+              {likes.length > 0 && likes.length === 1
+                ? likes.length + "like"
                 : ""}
+              {likes.length > 1 ? likes.length + "likes" : ""}
             </small>
           </p>
           {data.caption.length > 0 && (
@@ -204,6 +213,7 @@ const Post = ({ id, data }) => {
             <button
               className="button is-small is-inverted has-text-info"
               onClick={handleComment}
+              disabled={commentStatus}
             >
               <b>Post</b>
             </button>

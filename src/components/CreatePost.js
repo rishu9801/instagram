@@ -17,6 +17,7 @@ const CreatePost = ({ setPostModalOpen }) => {
   const [image, setImage] = useState();
   const [preview, setPreview] = useState();
   const [caption, setCaption] = useState();
+  const [uploadProgress, setUploadProgress] = useState();
   const [uploadStatus, setUploadStatus] = useState();
   const postRef = collection(db, "posts");
   const { user } = useContext(UserContext);
@@ -44,13 +45,15 @@ const CreatePost = ({ setPostModalOpen }) => {
           (snapshot.bytesTransferred / snapshot.totalBytes) *
           100
         ).toFixed(0);
-        setUploadStatus(progress);
+        setUploadProgress(progress);
+        setUploadStatus(true);
         console.log(progress);
       },
       (err) => {
         console.log(err);
       },
       () => {
+        setUploadProgress(false);
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log(downloadURL, "-> image URL");
           let newPost = {
@@ -97,7 +100,7 @@ const CreatePost = ({ setPostModalOpen }) => {
           {uploadStatus && (
             <progress
               className="progress is-info"
-              value={uploadStatus}
+              value={uploadProgress}
               max="100"
             ></progress>
           )}
@@ -150,6 +153,7 @@ const CreatePost = ({ setPostModalOpen }) => {
             <button
               className="button is-info is-small"
               onClick={handlePostUpload}
+              disabled={uploadProgress}
             >
               Post
             </button>
