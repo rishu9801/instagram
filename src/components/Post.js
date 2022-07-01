@@ -157,7 +157,9 @@ const Post = ({ id, data }) => {
               {likes.length > 0 && likes.length === 1
                 ? likes.length + "like"
                 : ""}
-              {likes.length > 1 ? likes.length + "likes" : ""}
+              {likes.length > 1 && likes.length <= 2
+                ? likes.length + "likes"
+                : ""}
             </small>
           </p>
           {data.caption.length > 0 && (
