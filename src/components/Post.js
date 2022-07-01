@@ -180,7 +180,7 @@ const Post = ({ id, data }) => {
                   })}
                 </ul>
                 {comments.length > 0 ? (
-                  <a href="" type="button" onClick={handlePostModal}>
+                  <a type="button" onClick={handlePostModal}>
                     <small>View all {comments.length} comments</small>
                   </a>
                 ) : null}

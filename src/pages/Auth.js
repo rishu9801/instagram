@@ -7,14 +7,14 @@ const Auth = ({ setEmail, setPassword, setUserName, handleAuth }) => {
   return (
     <div>
       <div className="auth_form">
-        <div className="columns is-centered is-align-items-center">
-          <div className="column is-narrow">
-            <div className="image" style={{ width: "400px" }}>
+        <div className="columns is-centered is-align-items-center is-multiline">
+          <div className="column is-hidden-mobile is-half-tablet is-narrow-desktop">
+            <div className="image" style={{ width: "400px", margin: "auto" }}>
               <img src={mobileImg} alt="" />
             </div>
           </div>
           {auth === "login" && (
-            <div className="column is-4">
+            <div className="column is-full-mobile is-half-tablet is-4-desktop">
               <div className="card">
                 <div className="card-image">
                   <img src={logo} alt="" style={{ width: "200px" }} />
@@ -71,7 +71,7 @@ const Auth = ({ setEmail, setPassword, setUserName, handleAuth }) => {
             </div>
           )}
           {auth === "signup" && (
-            <div className="column is-4">
+            <div className="column is-full-mobile is-half-tablet is-4-desktop">
               <div className="card">
                 <div className="card-image">
                   <img src={logo} alt="" style={{ width: "200px" }} />

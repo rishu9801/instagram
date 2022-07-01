@@ -7,7 +7,7 @@ import discoverIcon from "../images/discover-icon.svg";
 import likeIcon from "../images/like-outline-dark.svg";
 import CreatePost from "./CreatePost";
 
-const TopNav = ({ loggedUser }) => {
+const TopNav = ({ logOut }) => {
   const [postModalOpen, setPostModalOpen] = useState(false);
 
   const handlePostModal = () => {
@@ -49,16 +49,16 @@ const TopNav = ({ loggedUser }) => {
                 <img src={discoverIcon} alt="" />
               </a>
             </div>
+            <div className="navbar-item">
+              <button className="button" onClick={logOut}>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </nav>
 
-      {postModalOpen && (
-        <CreatePost
-          setPostModalOpen={setPostModalOpen}
-          loggedUser={loggedUser}
-        />
-      )}
+      {postModalOpen && <CreatePost setPostModalOpen={setPostModalOpen} />}
     </div>
   );
 };
