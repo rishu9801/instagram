@@ -5,7 +5,7 @@ import TopNav from "../components/TopNav";
 import { collection, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase-config";
 
-const Home = ({ loggedUser }) => {
+const Home = ({ logOut }) => {
   //getPosts
   const [posts, setPosts] = useState([]);
   const postsRef = collection(db, "posts");
@@ -24,17 +24,16 @@ const Home = ({ loggedUser }) => {
 
   return (
     <div className="homepage">
-      <TopNav loggedUser={loggedUser}></TopNav>
-      <div className="columns is-flex-direction-column is-align-items-center is-marginless has-margin-top-50">
+      <TopNav logOut={logOut}></TopNav>
+      <div className="columns is-flex-direction-column is-align-items-center">
         {posts &&
           posts.map((post) => {
             return (
-              <div className="column is-3" key={post.id}>
-                <Post
-                  id={post.id}
-                  data={post.data}
-                  loggedUser={loggedUser}
-                ></Post>
+              <div
+                className="column is-12-mobile is-5-tablet is-3-desktop"
+                key={post.id}
+              >
+                <Post id={post.id} data={post.data}></Post>
               </div>
             );
           })}

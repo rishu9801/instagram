@@ -7,11 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 .has-background-transparent {
   background-color: transparent !important;
 }
@@ -62,6 +57,13 @@ code {
   }
 }
 
+/*Homepage*/
+.homepage {
+  .columns {
+    margin: 50px 0 0 0;
+  }
+}
+
 /*Post*/
 .card {
   &.post {
@@ -107,7 +109,12 @@ code {
 @media (max-width: 768px) {
   .topnav {
     .navbar {
-      width: 90%;
+      width: 95%;
+      .navbar-brand {
+        .navbar-item {
+          padding: 0.5rem;
+        }
+      }
     }
   }
 }

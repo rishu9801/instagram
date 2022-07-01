@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  signOut,
 } from "firebase/auth";
 import { useEffect, useState, useContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ function App() {
   const [password, setPassword] = useState();
   const [userName, setUserName] = useState();
   const navigate = useNavigate();
+  const auth = getAuth();
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -35,7 +37,6 @@ function App() {
 
   const handleAuth = (type) => {
     console.log(user, "from context api");
-    const auth = getAuth();
 
     if (type === "login") {
       console.log(email, password);
@@ -88,6 +89,21 @@ function App() {
         });
     }
   };
+
+  const logOut = () => {
+    signOut(auth)
+      .then(() => {
+        sessionStorage.removeItem("Auth Token");
+        sessionStorage.removeItem("user");
+        setUser(null);
+        navigate("/");
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+  };
   //auth end
 
   return (
@@ -104,7 +120,7 @@ function App() {
             />
           }
         ></Route>
-        <Route path="/home" element={<Home />}></Route>
+        <Route path="/home" element={<Home logOut={logOut} />}></Route>
       </Routes>
     </div>
   );
