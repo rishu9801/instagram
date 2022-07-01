@@ -17,6 +17,7 @@ const TopNav = ({ loggedUser }) => {
     <div className="topnav">
       <nav className="navbar">
         <div className="navbar-brand">
+          Rishu
           <img src={logo} alt="Instagram" />
         </div>
         <div className="navbar-menu">
