@@ -12,6 +12,7 @@ import {
 import { useEffect, useState, useContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import UserContext from "./userContext";
+import Profile from "./pages/Profile";
 
 function App() {
   //auth
@@ -22,18 +23,7 @@ function App() {
   const auth = getAuth();
   const { user, setUser } = useContext(UserContext);
 
-  useEffect(() => {
-    let authToken = sessionStorage.getItem("Auth Token");
-    const currentUser = sessionStorage.getItem("user");
-
-    if (authToken) {
-      navigate("/home");
-      console.log(currentUser);
-      setUser(currentUser);
-    } else {
-      navigate("/");
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   const handleAuth = (type) => {
     console.log(user, "from context api");
@@ -121,6 +111,7 @@ function App() {
           }
         ></Route>
         <Route path="/home" element={<Home logOut={logOut} />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
     </div>
   );

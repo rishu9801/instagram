@@ -1,9 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import homeIcon from "../images/home-icon.svg";
 import addIcon from "../images/add-post-icon.svg";
 import discoverIcon from "../images/discover-icon.svg";
 import CreatePost from "./CreatePost";
+import IconButton from "@mui/material/IconButton";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import PersonIcon from "@mui/icons-material/Person";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
 
 const TopNav = ({ logOut }) => {
   const [postModalOpen, setPostModalOpen] = useState(false);
@@ -11,6 +20,17 @@ const TopNav = ({ logOut }) => {
   const handlePostModal = () => {
     setPostModalOpen(!postModalOpen);
   };
+  const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div className="topnav">
       <nav className="navbar">
@@ -18,14 +38,10 @@ const TopNav = ({ logOut }) => {
           <img src={logo} alt="Instagram" />
           <div className="is-hidden-desktop is-flex">
             <div className="navbar-item">
-              <a>
-                <img src={homeIcon} alt="" width={15} />
-              </a>
+              <img src={homeIcon} alt="" width={15} />
             </div>
-            <div className="navbar-item">
-              <a onClick={handlePostModal}>
-                <img src={addIcon} alt="" width={15} />
-              </a>
+            <div className="navbar-item" onClick={handlePostModal}>
+              <img src={addIcon} alt="" width={15} />
             </div>
           </div>
         </div>
@@ -33,24 +49,85 @@ const TopNav = ({ logOut }) => {
           <div className="navbar-start"></div>
           <div className="navbar-end">
             <div className="navbar-item">
-              <a>
-                <img src={homeIcon} alt="" />
-              </a>
+              <img src={homeIcon} alt="" />
+            </div>
+            <div className="navbar-item" onClick={handlePostModal}>
+              <img src={addIcon} alt="" />
             </div>
             <div className="navbar-item">
-              <a onClick={handlePostModal}>
-                <img src={addIcon} alt="" />
-              </a>
+              <img src={discoverIcon} alt="" />
+            </div>
+            <div className="navbar-item is-clickable">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <Avatar sx={{ width: 32, height: 32 }}>R</Avatar>
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                  </ListItemIcon>
+                  Profile
+                </MenuItem>
+                <MenuItem>
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  Settings
+                </MenuItem>
+                <MenuItem onClick={logOut}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu>
             </div>
             <div className="navbar-item">
-              <a>
-                <img src={discoverIcon} alt="" />
-              </a>
-            </div>
-            <div className="navbar-item">
-              <button className="button" onClick={logOut}>
-                Logout
-              </button>
+              <button className="button">Logout</button>
             </div>
           </div>
         </div>
