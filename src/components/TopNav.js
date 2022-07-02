@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import logo from "../images/logo.png";
 import homeIcon from "../images/home-icon.svg";
-import messageIcon from "../images/messenger-icon.svg";
 import addIcon from "../images/add-post-icon.svg";
 import discoverIcon from "../images/discover-icon.svg";
-import likeIcon from "../images/like-outline-dark.svg";
 import CreatePost from "./CreatePost";
 
 const TopNav = ({ logOut }) => {
