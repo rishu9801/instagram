@@ -7,8 +7,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/*Common Classes*/
 .has-background-transparent {
   background-color: transparent !important;
+}
+
+.image {
+  &.is-150x150 {
+    width: 150px;
+    height: 150px;
+  }
 }
 
 /*Auth component*/
@@ -19,6 +27,25 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  .profile-img-container {
+    position: relative;
+    padding: 5px;
+    border-radius: 100%;
+    border: 3px solid hsl(204, 86%, 53%);
+    .profile-img-btn {
+      position: absolute;
+      bottom: 20px;
+      left: 170px;
+      background-color: hsl(204, 86%, 53%);
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 
 /*Navbar component*/
@@ -43,12 +70,20 @@ body {
         .input {
           width: 250px;
         }
+        cursor: pointer;
       }
       .navbar-end {
         .navbar-item {
           a {
             img {
               width: 20px;
+            }
+          }
+          .avatar-img {
+            img {
+              max-height: none;
+              width: 30px !important;
+              height: 30px;
             }
           }
         }

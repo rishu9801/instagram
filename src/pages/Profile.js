@@ -1,13 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import UserContext from "../userContext";
 import TopNav from "../components/TopNav";
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  where,
-} from "firebase/firestore";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db } from "../firebase-config";
 
 const Profile = ({ logOut }) => {
@@ -25,17 +19,17 @@ const Profile = ({ logOut }) => {
         }))
       );
     });
-  }, [user.displayName]);
+  }, [user.displayName, postsQuery]);
 
   return (
     <>
       <TopNav logOut={logOut}></TopNav>
       <div className="container has-margin-top-100">
-        <div className="columns is-centered">
-          <div className="column is-full">
-            <div className="media">
-              <div className="media-left">
-                <div className="image is-128x128">
+        <div className="columns is-centered is-multiline">
+          <div className="column is-10">
+            <div className="columns is-centered">
+              <div className="column is-3">
+                <div className="image is-150x150">
                   {user.photoURL ? (
                     <img
                       src={
@@ -51,26 +45,55 @@ const Profile = ({ logOut }) => {
                   )}
                 </div>
               </div>
-              <div className="media-content">
-                <h3>{user.displayName}</h3>
+              <div className="column is-6">
+                <div className="level has-margin-bottom-15">
+                  <div className="level-left">
+                    <div className="level-item has-margin-right-25">
+                      <h3 className="is-size-4">{user.displayName}</h3>
+                    </div>
+                    <div className="level-item has-margin-right-25">
+                      <button className="button is-small has-background-transparent">
+                        <b>Edit Profile</b>
+                      </button>
+                    </div>
+                    <div className="level-item">
+                      <button className="button has-background-transparent is-borderless is-paddingless">
+                        <i className="fas fa-cog"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <p className="has-margin-bottom-15">
+                  <b>{posts.length}</b> Posts
+                </p>
+                <p className="subtitle">Rishu Saha</p>
               </div>
             </div>
           </div>
+          <div className="column is-10 is-paddingless">
+            <hr />
+          </div>
+          <div className="column is-9">
+            <div className="columns is-multiline is-mobile">
+              {posts &&
+                posts.map((post) => {
+                  return (
+                    <div className="column is-4" key={post.id}>
+                      <img
+                        src={post.data.imageUrl}
+                        alt=""
+                        style={{
+                          aspectRatio: 1,
+                          objectFit: "cover",
+                          width: "100%",
+                        }}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         </div>
-        {posts &&
-          posts.map((post) => {
-            return (
-              <div key={post.id}>
-                <h1 key={post.id}>{post.data.userName}</h1>
-                <img
-                  src={post.data.imageUrl}
-                  alt=""
-                  width={200}
-                  style={{ aspectRatio: 1, objectFit: "cover" }}
-                />
-              </div>
-            );
-          })}
       </div>
     </>
   );

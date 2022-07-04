@@ -20,7 +20,7 @@ const Home = ({ logOut }) => {
         }))
       );
     });
-  }, []);
+  }, [postsQuery]);
 
   return (
     <div className="homepage">

@@ -51,7 +51,7 @@ const Post = ({ id, data }) => {
     onSnapshot(likeQuery, (snapshot) => {
       setLikes(
         snapshot.docs.map((doc) => {
-          if (doc.data().user === user) {
+          if (doc.data().user === user.displayName) {
             setIsLiked(true);
           }
           return { data: doc.data(), id: doc.id };
@@ -62,11 +62,8 @@ const Post = ({ id, data }) => {
 
   const handleLike = () => {
     setIsLiked(true);
-    let newLike = {
-      user: "rishu9801",
-    };
     if (!isLiked) {
-      addDoc(likeRef, newLike)
+      addDoc(likeRef, user.displayName)
         .then((res) => {
           console.log(res);
         })

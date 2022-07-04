@@ -26,9 +26,7 @@ function App() {
   const auth = getAuth();
   const { user, setUser } = useContext(UserContext);
 
-  const localData = sessionStorage.getItem("User Data");
-
-  useEffect(() => {}, []);
+  const localData = JSON.parse(sessionStorage.getItem("User Data"));
 
   useEffect(() => {
     if (localData) {
@@ -42,10 +40,7 @@ function App() {
   }, []);
 
   const handleAuth = (type) => {
-    console.log(user, "from context api");
-
     if (type === "login") {
-      console.log(email, password);
       auth
         .setPersistence(browserSessionPersistence)
         .then(() => {
@@ -60,10 +55,15 @@ function App() {
                   accessToken: res._tokenResponse.refreshToken,
                 })
               );
+              setUser({
+                displayName: auth.currentUser.displayName,
+                email: auth.currentUser.email,
+                photoURL: auth.currentUser.photoURL,
+                accessToken: res._tokenResponse.refreshToken,
+              });
             })
             .then(() => {
               navigate("/home");
-              console.log(user);
             })
             .catch((err) => {
               if (err.code === "auth/user-not-found") {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import homeIcon from "../images/home-icon.svg";
@@ -13,6 +13,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import PersonIcon from "@mui/icons-material/Person";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import UserContext from "../userContext";
 
 const TopNav = ({ logOut }) => {
   const [postModalOpen, setPostModalOpen] = useState(false);
@@ -31,6 +32,8 @@ const TopNav = ({ logOut }) => {
     setAnchorEl(null);
   };
 
+  const { user } = useContext(UserContext);
+
   return (
     <div className="topnav">
       <nav className="navbar">
@@ -48,7 +51,12 @@ const TopNav = ({ logOut }) => {
         <div className="navbar-menu">
           <div className="navbar-start"></div>
           <div className="navbar-end">
-            <div className="navbar-item">
+            <div
+              className="navbar-item"
+              onClick={() => {
+                navigate("/home");
+              }}
+            >
               <img src={homeIcon} alt="" />
             </div>
             <div className="navbar-item" onClick={handlePostModal}>
@@ -58,15 +66,25 @@ const TopNav = ({ logOut }) => {
               <img src={discoverIcon} alt="" />
             </div>
             <div className="navbar-item is-clickable">
-              <IconButton
+              <a
                 onClick={handleClick}
                 size="small"
                 aria-controls={open ? "account-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}>R</Avatar>
-              </IconButton>
+                {user.photoURL ? (
+                  <Avatar
+                    className="avatar-img"
+                    sx={{ width: 32, height: 32, objectFit: "cover" }}
+                    src={user.photoURL}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 32, height: 32 }}>
+                    <i className="fas fa-user"></i>
+                  </Avatar>
+                )}
+              </a>
               <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
@@ -125,9 +143,6 @@ const TopNav = ({ logOut }) => {
                   Logout
                 </MenuItem>
               </Menu>
-            </div>
-            <div className="navbar-item">
-              <button className="button">Logout</button>
             </div>
           </div>
         </div>

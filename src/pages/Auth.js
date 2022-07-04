@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import mobileImg from "../images/login-mobile.png";
 import logo from "../images/logo.png";
+import userProfile from "../images/user-profile.png";
 import { storage } from "../firebase-config";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
+import { Avatar } from "@mui/material";
 
 const Auth = ({
   setEmail,
@@ -14,7 +16,7 @@ const Auth = ({
   const [auth, setAuth] = useState("login");
   const [image, setImage] = useState();
   const [preview, setPreview] = useState();
-  const [uploadStatus, setUploadStatus] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState();
 
   useEffect(() => {
     if (image) {
@@ -134,6 +136,41 @@ const Auth = ({
                   >
                     <div className="field">
                       <input
+                        type="file"
+                        className="is-hidden"
+                        id="profile-img-input"
+                        onChange={(e) => {
+                          setImage(e.target.files[0]);
+                        }}
+                      />
+                      <div className="profile-img-container is-inline-block">
+                        <Avatar
+                          sx={{
+                            width: 200,
+                            height: 200,
+                            marginX: "auto",
+                          }}
+                          src={preview ? preview : userProfile}
+                        ></Avatar>
+                        <button
+                          className="profile-img-btn is-borderless"
+                          onClick={() => {
+                            document
+                              .getElementById("profile-img-input")
+                              .click();
+                          }}
+                          disabled={uploadStatus ? uploadStatus : false}
+                        >
+                          {uploadStatus ? (
+                            <i className="fa fa-spinner fa-spin"></i>
+                          ) : (
+                            <i className="fas fa-pen"></i>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <input
                         type="text"
                         className="input"
                         placeholder="Enter Username"
@@ -141,13 +178,6 @@ const Auth = ({
                       />
                     </div>
                     <div className="field">
-                      <input
-                        type="file"
-                        onChange={(e) => {
-                          setImage(e.target.files[0]);
-                        }}
-                      />
-                      {preview && <img src={preview} alt="" />}
                       <input
                         type="email"
                         className="input"

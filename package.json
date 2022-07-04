@@ -13,6 +13,7 @@
     "bulma": "^0.9.4",
     "bulma-extensions": "^6.2.7",
     "bulma-helpers": "^0.4.2",
+    "cropperjs": "^1.5.12",
     "firebase": "^9.8.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
