@@ -62,8 +62,11 @@ const Post = ({ id, data }) => {
 
   const handleLike = () => {
     setIsLiked(true);
+    let newLike = {
+      user: user.displayName,
+    };
     if (!isLiked) {
-      addDoc(likeRef, user.displayName)
+      addDoc(likeRef, newLike)
         .then((res) => {
           console.log(res);
         })
