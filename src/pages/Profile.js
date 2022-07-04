@@ -30,7 +30,12 @@ const Profile = () => {
     <div>
       {posts &&
         posts.map((post) => {
-          return <h1 key={post.id}>{post.data.userName}</h1>;
+          return (
+            <div>
+              <h1 key={post.id}>{post.data.userName}</h1>
+              <img src={post.data.imageUrl} alt="" />
+            </div>
+          );
         })}
     </div>
   );
