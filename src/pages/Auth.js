@@ -1,9 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import mobileImg from "../images/login-mobile.png";
 import logo from "../images/logo.png";
+import { storage } from "../firebase-config";
+import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 
-const Auth = ({ setEmail, setPassword, setUserName, handleAuth }) => {
+const Auth = ({
+  setEmail,
+  setPassword,
+  setUserName,
+  handleAuth,
+  setProfileImg,
+}) => {
   const [auth, setAuth] = useState("login");
+  const [image, setImage] = useState();
+  const [preview, setPreview] = useState();
+  const [uploadStatus, setUploadStatus] = useState(false);
+
+  useEffect(() => {
+    if (image) {
+      const imageRef = ref(storage, `profile-images/${image.name}`);
+      const uploadTask = uploadBytesResumable(imageRef, image);
+
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (
+              (snapshot.bytesTransferred / snapshot.totalBytes) *
+              100
+            ).toFixed(0);
+            setUploadStatus(true);
+            console.log(progress);
+          },
+          (err) => {
+            console.log(err);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log(downloadURL, "-> image URL");
+              setProfileImg(downloadURL);
+            });
+            setUploadStatus(false);
+          }
+        );
+      };
+    } else {
+      setPreview(null);
+    }
+  }, [image]);
+
+  const h = () => {};
   return (
     <div>
       <div className="auth_form">
@@ -93,6 +142,13 @@ const Auth = ({ setEmail, setPassword, setUserName, handleAuth }) => {
                     </div>
                     <div className="field">
                       <input
+                        type="file"
+                        onChange={(e) => {
+                          setImage(e.target.files[0]);
+                        }}
+                      />
+                      {preview && <img src={preview} alt="" />}
+                      <input
                         type="email"
                         className="input"
                         placeholder="Enter Email"
@@ -108,7 +164,10 @@ const Auth = ({ setEmail, setPassword, setUserName, handleAuth }) => {
                       />
                     </div>
                     <div className="field has-margin-top-30">
-                      <button className="button is-fullwidth is-info">
+                      <button
+                        className="button is-fullwidth is-info"
+                        disabled={uploadStatus}
+                      >
                         Sign Up
                       </button>
                     </div>

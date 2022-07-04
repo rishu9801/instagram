@@ -8,6 +8,8 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   signOut,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { useEffect, useState, useContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -19,31 +21,60 @@ function App() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [userName, setUserName] = useState();
+  const [profileImg, setProfileImg] = useState();
   const navigate = useNavigate();
   const auth = getAuth();
   const { user, setUser } = useContext(UserContext);
 
+  const localData = sessionStorage.getItem("User Data");
+
   useEffect(() => {}, []);
+
+  useEffect(() => {
+    if (localData) {
+      setUser({
+        displayName: localData.displayName,
+        email: localData.email,
+        photoURL: localData.photoURL,
+        accessToken: localData.accessToken,
+      });
+    }
+  }, []);
 
   const handleAuth = (type) => {
     console.log(user, "from context api");
 
     if (type === "login") {
       console.log(email, password);
-      signInWithEmailAndPassword(auth, email, password)
-        .then((res) => {
-          setUser(auth.currentUser.displayName);
-          console.log(res.user);
-          sessionStorage.setItem("Auth Token", res._tokenResponse.refreshToken);
-          sessionStorage.setItem("user", auth.currentUser.displayName);
-        })
+      auth
+        .setPersistence(browserSessionPersistence)
         .then(() => {
-          navigate("/home");
+          signInWithEmailAndPassword(auth, email, password)
+            .then((res) => {
+              sessionStorage.setItem(
+                "User Data",
+                JSON.stringify({
+                  displayName: auth.currentUser.displayName,
+                  email: auth.currentUser.email,
+                  photoURL: auth.currentUser.photoURL,
+                  accessToken: res._tokenResponse.refreshToken,
+                })
+              );
+            })
+            .then(() => {
+              navigate("/home");
+              console.log(user);
+            })
+            .catch((err) => {
+              if (err.code === "auth/user-not-found") {
+                alert("auth/user-not-found");
+              }
+            });
         })
-        .catch((err) => {
-          if (err.code === "auth/user-not-found") {
-            alert("auth/user-not-found");
-          }
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
         });
     } else if (type === "signup") {
       createUserWithEmailAndPassword(auth, email, password)
@@ -51,18 +82,22 @@ function App() {
           console.log(userName, "userName");
           updateProfile(auth.currentUser, {
             displayName: userName,
-            photoURL: "https://example.com/jane-q-user/profile.jpg",
+            photoURL: profileImg,
           })
             .then(() => {
               // Profile updated!
               // ...
               console.log(auth.currentUser.displayName);
-              setUser(auth.currentUser.displayName);
+              setUser(auth.currentUser);
               sessionStorage.setItem(
-                "Auth Token",
-                res._tokenResponse.refreshToken
+                "User Data",
+                JSON.stringify({
+                  displayName: auth.currentUser.displayName,
+                  email: auth.currentUser.email,
+                  photoURL: auth.currentUser.photoURL,
+                  accessToken: res._tokenResponse.refreshToken,
+                })
               );
-              sessionStorage.setItem("user", auth.currentUser.displayName);
               navigate("/home");
             })
             .catch((error) => {
@@ -83,8 +118,7 @@ function App() {
   const logOut = () => {
     signOut(auth)
       .then(() => {
-        sessionStorage.removeItem("Auth Token");
-        sessionStorage.removeItem("user");
+        sessionStorage.removeItem("User Data");
         setUser(null);
         navigate("/");
         // Sign-out successful.
@@ -107,11 +141,12 @@ function App() {
               setPassword={setPassword}
               setUserName={setUserName}
               handleAuth={handleAuth}
+              setProfileImg={setProfileImg}
             />
           }
         ></Route>
         <Route path="/home" element={<Home logOut={logOut} />}></Route>
-        <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/profile" element={<Profile logOut={logOut} />}></Route>
       </Routes>
     </div>
   );

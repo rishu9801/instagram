@@ -80,7 +80,7 @@ const Post = ({ id, data }) => {
     e.preventDefault();
     let newComment = {
       comment: newComments,
-      userName: user,
+      userName: user.displayName,
       createdAt: Timestamp.now().seconds,
     };
     addDoc(commentRef, newComment)

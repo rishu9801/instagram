@@ -58,7 +58,7 @@ const CreatePost = ({ setPostModalOpen }) => {
           console.log(downloadURL, "-> image URL");
           let newPost = {
             caption: caption ? caption : "No caption....",
-            userName: user,
+            userName: user.displayName,
             imageUrl: downloadURL,
             createdAt: Timestamp.now().seconds,
           };
